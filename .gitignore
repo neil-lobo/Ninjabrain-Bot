@@ -32,3 +32,6 @@ hs_err_pid*
 /.gradle/
 .classpath
 /target/
+
+# nix
+result
