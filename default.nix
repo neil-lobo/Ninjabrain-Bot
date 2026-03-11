@@ -4,6 +4,13 @@
 let
   pname = "ninjabrain-bot";
   version = "1.5.2-unstable";
+  runtimeDependencies = with pkgs; [
+    libxkbcommon
+    xorg.libXtst
+    xorg.libX11
+    xorg.libXt
+    xorg.libXinerama
+  ];
 in
 pkgs.maven.buildMavenPackage {
   inherit pname;
@@ -16,7 +23,6 @@ pkgs.maven.buildMavenPackage {
   nativeBuildInputs = with pkgs; [
     maven
     makeWrapper
-    autoPatchelfHook
   ];
 
   buildInputs = with pkgs; [
@@ -24,13 +30,7 @@ pkgs.maven.buildMavenPackage {
     jna
   ];
 
-  runtimeDependencies = with pkgs; [
-    libxkbcommon
-    xorg.libXtst
-    xorg.libX11
-    xorg.libXt
-    xorg.libXinerama
-  ];
+  inherit runtimeDependencies;
 
   mvnParameters = pkgs.lib.escapeShellArgs [
     "assembly:single"
@@ -43,18 +43,7 @@ pkgs.maven.buildMavenPackage {
     install -Dm644 target/ninjabrainbot-1.5.2-PRE1-jar-with-dependencies.jar $out/share/java/ninjabrainbot.jar
 
     makeWrapper ${pkgs.jdk}/bin/java $out/bin/ninjabrainbot \
-      --prefix LD_LIBRARY_PATH : ${
-        pkgs.lib.makeLibraryPath (
-          with pkgs;
-          [
-            libxkbcommon
-            xorg.libXtst
-            xorg.libX11
-            xorg.libXt
-            xorg.libXinerama
-          ]
-        )
-      } \
+      --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath (runtimeDependencies)} \
       --add-flags "-cp $out/share/java/ninjabrainbot.jar" \
       --add-flags "ninjabrainbot.Main"
 
