@@ -15,5 +15,7 @@ pkgs.mkShell {
 
   shellHook = ''
     export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath (project.runtimeDependencies)}
+
+    alias run='mvn exec:java -Dexec.mainClass="ninjabrainbot.Main"'
   '';
 }
