@@ -40,7 +40,7 @@ pkgs.maven.buildMavenPackage {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 target/ninjabrainbot-1.5.2-PRE1-jar-with-dependencies.jar $out/share/java/ninjabrainbot.jar
+    install -Dm644 target/ninjabrainbot-1.5.2-jar-with-dependencies.jar $out/share/java/ninjabrainbot.jar
 
     makeWrapper ${pkgs.jdk}/bin/java $out/bin/ninjabrainbot \
       --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath (runtimeDependencies)} \
